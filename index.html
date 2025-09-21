@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>Minesweeper</h1>
+            
+            <div class="game-controls">
+                <div class="difficulty-selector">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty">
+                        <option value="beginner">Beginner (9x9, 10 mines)</option>
+                        <option value="intermediate">Intermediate (16x16, 40 mines)</option>
+                        <option value="expert">Expert (30x16, 99 mines)</option>
+                    </select>
+                </div>
+                
+                <button id="new-game-btn" class="new-game-btn">New Game</button>
+            </div>
+        </header>
+
+        <div class="game-info">
+            <div class="info-panel">
+                <div class="mine-counter">
+                    <span class="label">Mines:</span>
+                    <span id="mine-count" class="count">010</span>
+                </div>
+                
+                <div class="game-status">
+                    <button id="smiley-btn" class="smiley-btn">😊</button>
+                </div>
+                
+                <div class="timer">
+                    <span class="label">Time:</span>
+                    <span id="timer-count" class="count">000</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-board-container">
+            <div id="game-board" class="game-board">
+                <!-- Game cells will be generated here -->
+            </div>
+        </div>
+
+        <div class="game-instructions">
+            <h3>How to Play:</h3>
+            <ul>
+                <li><strong>Left click:</strong> Reveal a cell</li>
+                <li><strong>Right click:</strong> Flag/unflag a suspected mine</li>
+                <li><strong>Goal:</strong> Reveal all cells without mines</li>
+                <li><strong>Numbers:</strong> Show how many mines are adjacent to that cell</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
