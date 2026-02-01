@@ -370,7 +370,92 @@ class MinesweeperGame {
 	}
 }
 
-// Initialize the game when the page loads
+// --- i18n support (English + Polish) ---
+const i18n = (function () {
+	const translations = {
+		en: {
+			title: "Minesweeper",
+			difficulty_label: "Difficulty:",
+			difficulty_beginner: "Beginner (9x9, 10 mines)",
+			difficulty_intermediate: "Intermediate (16x16, 40 mines)",
+			difficulty_expert: "Expert (30x16, 99 mines)",
+			language_label: "Language:",
+			new_game: "New Game",
+			mines_label: "Mines:",
+			time_label: "Time:",
+			how_to_play: "How to Play:",
+			how_left: "<strong>Left click:</strong> Reveal a cell",
+			how_right: "<strong>Right click:</strong> Flag/unflag a suspected mine",
+			how_goal: "<strong>Goal:</strong> Reveal all cells without mines",
+			how_numbers: "<strong>Numbers:</strong> Show how many mines are adjacent to that cell"
+		},
+		pl: {
+			title: "Saper",
+			difficulty_label: "Poziom:",
+			difficulty_beginner: "Łatwy (9x9, 10 min)",
+			difficulty_intermediate: "Średni (16x16, 40 min)",
+			difficulty_expert: "Trudny (30x16, 99 min)",
+			language_label: "Język:",
+			new_game: "Nowa gra",
+			mines_label: "Miny:",
+			time_label: "Czas:",
+			how_to_play: "Jak grać:",
+			how_left: "<strong>Klik lewym przyciskiem:</strong> Odkryj pole",
+			how_right: "<strong>Klik prawym przyciskiem:</strong> Oznacz/usuń flagę podejrzanej miny",
+			how_goal: "<strong>Cel:</strong> Odkryj wszystkie pola bez min",
+			how_numbers: "<strong>Cyfry:</strong> Pokazują ile min jest przy danym polu"
+		}
+	};
+
+	function detect() {
+		const stored = localStorage.getItem("lang");
+		if (stored && translations[stored]) return stored;
+		const nav = navigator.language || navigator.userLanguage || "en";
+		if (nav.toLowerCase().startsWith("pl")) return "pl";
+		return "en";
+	}
+
+	let current = detect();
+
+	function t(key) {
+		return (translations[current] && translations[current][key]) || translations.en[key] || key;
+	}
+
+	function apply() {
+		document.documentElement.lang = current;
+		document.querySelectorAll("[data-i18n]").forEach(el => {
+			const key = el.getAttribute("data-i18n");
+			el.innerHTML = t(key);
+		});
+		// document title
+		document.title = t("title");
+		const langSelect = document.getElementById("language-select");
+		if (langSelect) langSelect.value = current;
+	}
+
+	function setLang(lang) {
+		if (!translations[lang]) return;
+		current = lang;
+		localStorage.setItem("lang", lang);
+		apply();
+	}
+
+	return {
+		t,
+		apply,
+		setLang,
+		get currentLang() {
+			return current;
+		}
+	};
+})();
+
+// Initialize the game when the page loads and apply translations
 document.addEventListener("DOMContentLoaded", () => {
+	i18n.apply();
+	const langSelect = document.getElementById("language-select");
+	if (langSelect) {
+		langSelect.addEventListener("change", e => i18n.setLang(e.target.value));
+	}
 	new MinesweeperGame();
 });
